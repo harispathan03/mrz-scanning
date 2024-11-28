@@ -1,6 +1,7 @@
 import 'package:blinkid_flutter/microblink_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class BlinkidViewModel extends ChangeNotifier {
   String license = "";
@@ -68,5 +69,25 @@ class BlinkidViewModel extends ChangeNotifier {
     documentNumber = result.mrzResult?.documentNumber ?? "";
     dob = dateOfBirth;
     doe = dateOfExpiry;
+  }
+
+  String fetchBirthDateFromString(String dateString) {
+    String date = dateString.substring(15, 24);
+    List<String> arr = date.split(".");
+    DateTime dateTime =
+        DateTime(int.parse(arr[2]), int.parse(arr[1]), int.parse(arr[0]));
+    final DateFormat formatter = DateFormat('dd MMMM yyyy');
+    final String formatted = formatter.format(dateTime);
+    return formatted;
+  }
+
+  String fetchExpiryDateFromString(String dateString) {
+    String date = dateString.substring(16);
+    List<String> arr = date.split(".");
+    DateTime dateTime =
+        DateTime(int.parse(arr[2]), int.parse(arr[1]), int.parse(arr[0]));
+    final DateFormat formatter = DateFormat('dd MMMM yyyy');
+    final String formatted = formatter.format(dateTime);
+    return formatted;
   }
 }

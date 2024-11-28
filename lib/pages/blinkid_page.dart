@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:mrz/view_model/blinkid_viewmodel.dart';
+import 'package:mrz/widget/custom_detail_row.dart';
 import 'package:mrz/widget/custom_home_button.dart';
 import 'package:provider/provider.dart';
 
-class BlinkidPage extends StatelessWidget {
+class BlinkidPage extends StatefulWidget {
   const BlinkidPage({super.key});
+
+  @override
+  State<BlinkidPage> createState() => _BlinkidPageState();
+}
+
+class _BlinkidPageState extends State<BlinkidPage> {
+  late BlinkidViewModel viewModel;
+
+  @override
+  void initState() {
+    viewModel = context.read<BlinkidViewModel>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,44 +26,61 @@ class BlinkidPage extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.purple.shade500,
-        title:
-            const Text("Blinkid Scan", style: TextStyle(color: Colors.white)),
+        title: const Text("BlinkId Passport Scan",
+            style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Consumer<BlinkidViewModel>(
               builder: (context, model, child) => (model.documentNumber != "" &&
                       model.documentNumber.isNotEmpty)
-                  ? Column(
-                      children: [
-                        Text(
-                          model.isVerified
-                              ? "Document is verified successfully!"
-                              : "Document verification failed!",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 20),
-                        ),
-                        Text("First Name: ${model.firstName}",
-                            style: const TextStyle(fontSize: 16)),
-                        Text("Last Name: ${model.lastName}",
-                            style: const TextStyle(fontSize: 16)),
-                        Text("Document Number: ${model.documentNumber}",
-                            style: const TextStyle(fontSize: 16)),
-                        Text("Gender: ${model.gender}",
-                            style: const TextStyle(fontSize: 16)),
-                        Text(model.dob, style: const TextStyle(fontSize: 16)),
-                        Text(model.doe, style: const TextStyle(fontSize: 16)),
-                        const SizedBox(height: 20)
-                      ],
+                  ? Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            model.isVerified
+                                ? "Passport is Valid"
+                                : "Passport is Invalid",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: model.isVerified
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                          const SizedBox(height: 20),
+                          CustomDetailRow(
+                              propertyName: "First Name: ",
+                              value: model.firstName),
+                          CustomDetailRow(
+                              propertyName: "Last Name: ",
+                              value: model.lastName),
+                          CustomDetailRow(
+                              propertyName: "Passport Number: ",
+                              value: model.documentNumber),
+                          CustomDetailRow(
+                              propertyName: "Gender: ", value: model.gender),
+                          CustomDetailRow(
+                              propertyName: "Date of birth: ",
+                              value: viewModel
+                                  .fetchBirthDateFromString(model.dob)),
+                          CustomDetailRow(
+                              propertyName: "Date of expiry: ",
+                              value: viewModel
+                                  .fetchExpiryDateFromString(model.doe)),
+                          const SizedBox(height: 20)
+                        ],
+                      ),
                     )
                   : Container()),
           InkWell(
               onTap: () {
                 context.read<BlinkidViewModel>().scan(context);
               },
-              child: const CustomHomeButton(text: "Select image from gallery"))
+              child: const CustomHomeButton(text: "Scan Now"))
         ],
       ),
     );

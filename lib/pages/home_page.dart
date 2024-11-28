@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple.shade500,
-        title: const Text("MRZ Scan", style: TextStyle(color: Colors.white)),
+        title: const Text("MRZ", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: Column(
@@ -23,9 +23,9 @@ class HomePage extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const BlinkidPage()));
               },
-              child: const CustomHomeButton(text: "BlinkId")),
+              child: const CustomHomeButton(text: "BlinkId Passport Scan")),
           const SizedBox(height: 10),
-          const CustomHomeButton(text: "Google ML Kit"),
+          const CustomHomeButton(text: "Google ML Kit Passport Scan"),
           const SizedBox(height: 10),
         ],
       ),
