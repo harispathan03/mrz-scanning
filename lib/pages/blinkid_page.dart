@@ -33,14 +33,14 @@ class BlinkidPage extends StatelessWidget {
                         ),
                         Text("First Name: ${model.firstName}",
                             style: const TextStyle(fontSize: 16)),
-                        Text("Last Name: ${model.firstName}",
+                        Text("Last Name: ${model.lastName}",
                             style: const TextStyle(fontSize: 16)),
                         Text("Document Number: ${model.documentNumber}",
                             style: const TextStyle(fontSize: 16)),
-                        Text("Date of birth: ${model.dob}",
+                        Text("Gender: ${model.gender}",
                             style: const TextStyle(fontSize: 16)),
-                        Text("Date of expiry: ${model.doe}",
-                            style: const TextStyle(fontSize: 16)),
+                        Text(model.dob, style: const TextStyle(fontSize: 16)),
+                        Text(model.doe, style: const TextStyle(fontSize: 16)),
                         const SizedBox(height: 20)
                       ],
                     )

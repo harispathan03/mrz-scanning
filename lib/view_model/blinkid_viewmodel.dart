@@ -7,6 +7,7 @@ class BlinkidViewModel extends ChangeNotifier {
   String firstName = "";
   String lastName = "";
   String documentNumber = "";
+  String gender = "";
   String dob = "";
   String doe = "";
   bool isVerified = false;
@@ -61,6 +62,7 @@ class BlinkidViewModel extends ChangeNotifier {
           "${result.mrzResult?.dateOfExpiry?.year}\n";
     }
     isVerified = result.mrzResult?.mrzVerified ?? false;
+    gender = result.mrzResult?.gender ?? "";
     firstName = result.mrzResult?.secondaryId ?? "";
     lastName = result.mrzResult?.primaryId ?? "";
     documentNumber = result.mrzResult?.documentNumber ?? "";
