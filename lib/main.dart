@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mrz/pages/home_page.dart';
-import 'package:mrz/view_model/home_viewmodel.dart';
+import 'package:mrz/view_model/blinkid_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => HomeViewmodel()),
+        ChangeNotifierProvider(create: (context) => BlinkidViewModel()),
       ],
       child: MaterialApp(
         title: 'MRZ Scanning',

@@ -2,7 +2,7 @@ import 'package:blinkid_flutter/microblink_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class HomeViewmodel extends ChangeNotifier {
+class BlinkidViewModel extends ChangeNotifier {
   String license = "";
   String firstName = "";
   String lastName = "";
