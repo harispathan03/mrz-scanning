@@ -18,6 +18,7 @@ class GoogleMlKitViewmodel extends ChangeNotifier {
       TextRecognizer(script: TextRecognitionScript.latin);
 
   void processDeviceImage(String path) async {
+    clearData();
     final RecognizedText recognizedText =
         await textRecognizer.processImage(InputImage.fromFilePath(path));
 
@@ -30,9 +31,20 @@ class GoogleMlKitViewmodel extends ChangeNotifier {
     }
     var firstMRZ = mrz.first.replaceAll(" ", "");
     var secondMRZ = mrz.last.replaceAll(" ", "");
+    extractDataOfFirstLine(firstMRZ);
     extractDataOfSecondLine(secondMRZ);
     log('First MRZ: $firstMRZ');
     log('Second MRZ: $secondMRZ');
+  }
+
+  void extractDataOfFirstLine(String text) {
+    text = text.substring(5);
+    int indexOfFirstSign = text.indexOf("<");
+    lastName = text.substring(0, indexOfFirstSign);
+    text = text.replaceFirst(lastName, "");
+    text = text.replaceAll("<", " ");
+    firstName = text;
+    firstName = text.trim();
   }
 
   void extractDataOfSecondLine(String text) {
@@ -67,5 +79,17 @@ class GoogleMlKitViewmodel extends ChangeNotifier {
     final DateFormat formatter = DateFormat('dd MMMM yyyy');
     final String formatted = formatter.format(dateTime);
     return formatted;
+  }
+
+  void clearData() {
+    mrz.clear();
+    firstName = "";
+    lastName = "";
+    documentNumber = "";
+    gender = "";
+    dob = "";
+    doe = "";
+    isVerified = false;
+    notifyListeners();
   }
 }

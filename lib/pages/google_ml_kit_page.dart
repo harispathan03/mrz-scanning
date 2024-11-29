@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mrz/view_model/google_ml_kit_viewmodel.dart';
@@ -39,59 +37,57 @@ class _GoogleMlKitPageState extends State<GoogleMlKitPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Consumer<GoogleMlKitViewmodel>(
-                  builder: (context, model, child) => (model.documentNumber !=
-                              "" &&
-                          model.documentNumber.isNotEmpty)
-                      ? Center(
-                          child: Column(
-                            children: [
-                              Text(
-                                model.isVerified
-                                    ? "Passport is Valid"
-                                    : "Passport is Invalid",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                    color: model.isVerified
-                                        ? Colors.green
-                                        : Colors.red),
+                  builder: (context, model, child) =>
+                      (model.documentNumber != "" &&
+                              model.documentNumber.isNotEmpty)
+                          ? Center(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    model.isVerified
+                                        ? "Passport is Valid"
+                                        : "Passport is Invalid",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20,
+                                        color: model.isVerified
+                                            ? Colors.green
+                                            : Colors.red),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  CustomDetailRow(
+                                      propertyName: "First Name: ",
+                                      value: model.firstName),
+                                  CustomDetailRow(
+                                      propertyName: "Last Name: ",
+                                      value: model.lastName),
+                                  CustomDetailRow(
+                                      propertyName: "Passport Number: ",
+                                      value: model.documentNumber),
+                                  CustomDetailRow(
+                                      propertyName: "Gender: ",
+                                      value: model.gender),
+                                  CustomDetailRow(
+                                      propertyName: "Date of birth: ",
+                                      value: viewModel.fetchDateFromString(
+                                          model.dob, true)),
+                                  CustomDetailRow(
+                                      propertyName: "Date of expiry: ",
+                                      value: viewModel.fetchDateFromString(
+                                          model.doe, false)),
+                                  const SizedBox(height: 20)
+                                ],
                               ),
-                              const SizedBox(height: 20),
-                              CustomDetailRow(
-                                  propertyName: "First Name: ",
-                                  value: model.firstName),
-                              CustomDetailRow(
-                                  propertyName: "Last Name: ",
-                                  value: model.lastName),
-                              CustomDetailRow(
-                                  propertyName: "Passport Number: ",
-                                  value: model.documentNumber),
-                              CustomDetailRow(
-                                  propertyName: "Gender: ",
-                                  value: model.gender),
-                              CustomDetailRow(
-                                  propertyName: "Date of birth: ",
-                                  value:
-                                      viewModel.fetchDateFromString(model.dob,true)),
-                              CustomDetailRow(
-                                  propertyName: "Date of expiry: ",
-                                  value:
-                                      viewModel.fetchDateFromString(model.doe,false)),
-                              const SizedBox(height: 20)
-                            ],
-                          ),
-                        )
-                      : Container()),
+                            )
+                          : Container()),
               InkWell(
                   onTap: () async {
-                    log(viewModel.dob);
-                    log(viewModel.doe);
-                    // ImagePicker picker = ImagePicker();
-                    // XFile? xfile =
-                    //     await picker.pickImage(source: ImageSource.camera);
-                    // if (xfile != null) {
-                    //   viewModel.processDeviceImage(xfile.path);
-                    // }
+                    ImagePicker picker = ImagePicker();
+                    XFile? xfile =
+                        await picker.pickImage(source: ImageSource.camera);
+                    if (xfile != null) {
+                      viewModel.processDeviceImage(xfile.path);
+                    }
                   },
                   child:
                       const CustomHomeButton(text: "Scan image from camera")),
