@@ -1,11 +1,12 @@
 import 'dart:developer';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mrz/view_model/google_ml_kit_viewmodel.dart';
 import 'package:provider/provider.dart';
+
+import '../widget/custom_detail_row.dart';
+import '../widget/custom_home_button.dart';
 
 class GoogleMlKitPage extends StatefulWidget {
   const GoogleMlKitPage({super.key});
@@ -16,85 +17,96 @@ class GoogleMlKitPage extends StatefulWidget {
 
 class _GoogleMlKitPageState extends State<GoogleMlKitPage> {
   late GoogleMlKitViewmodel viewModel;
-  CameraController? _cameraController;
-  late TextRecognizer _textRecognizer;
-  bool _isProcessing = false;
 
   @override
   void initState() {
     viewModel = context.read<GoogleMlKitViewmodel>();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      // await _initializeCamera();
-    });
-    _textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     super.initState();
-  }
-
-  Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    _cameraController = CameraController(cameras[0], ResolutionPreset.high);
-    await _cameraController?.initialize();
-    _cameraController?.startImageStream(processCameraImage);
-  }
-
-  void processCameraImage(CameraImage cameraImage) async {
-    if (_isProcessing) return;
-    _isProcessing = true;
-    final InputImage inputImage =
-        await viewModel.convertCameraImageToInputImage(
-            cameraImage, _cameraController!.description);
-
-    final RecognizedText recognizedText =
-        await _textRecognizer.processImage(inputImage);
-
-    for (TextBlock block in recognizedText.blocks) {
-      for (TextLine line in block.lines) {
-        if (viewModel.isMRZLine(line.text)) {
-          log('Detected MRZ: ${line.text}');
-        }
-      }
-    }
-
-    _isProcessing = false;
-  }
-
-  void processDeviceImage(String path) async {
-    final RecognizedText recognizedText =
-        await _textRecognizer.processImage(InputImage.fromFilePath(path));
-
-    for (TextBlock block in recognizedText.blocks) {
-      for (TextLine line in block.lines) {
-        log(line.text);
-        if (viewModel.isMRZLine(line.text)) {
-          log('Detected MRZ: ${line.text}');
-        }
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _textRecognizer.close();
-    _cameraController?.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // if (_cameraController == null || !_cameraController!.value.isInitialized) {
-    //   return const Center(child: CircularProgressIndicator());
-    // }
     return Scaffold(
-      body: InkWell(
-          onTap: () async {
-            ImagePicker picker = ImagePicker();
-            XFile? xfile = await picker.pickImage(source: ImageSource.gallery);
-            if (xfile != null) {
-              processDeviceImage(xfile.path);
-            }
-          },
-          child: const Center(child: Text("Scan image from gallery"))),
-      // body: CameraPreview(_cameraController!),
-    );
+        appBar: AppBar(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.purple.shade500,
+          title: const Text("ML Kit Passport Scan",
+              style: TextStyle(color: Colors.white)),
+          centerTitle: true,
+        ),
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Consumer<GoogleMlKitViewmodel>(
+                  builder: (context, model, child) => (model.documentNumber !=
+                              "" &&
+                          model.documentNumber.isNotEmpty)
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                model.isVerified
+                                    ? "Passport is Valid"
+                                    : "Passport is Invalid",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                    color: model.isVerified
+                                        ? Colors.green
+                                        : Colors.red),
+                              ),
+                              const SizedBox(height: 20),
+                              CustomDetailRow(
+                                  propertyName: "First Name: ",
+                                  value: model.firstName),
+                              CustomDetailRow(
+                                  propertyName: "Last Name: ",
+                                  value: model.lastName),
+                              CustomDetailRow(
+                                  propertyName: "Passport Number: ",
+                                  value: model.documentNumber),
+                              CustomDetailRow(
+                                  propertyName: "Gender: ",
+                                  value: model.gender),
+                              CustomDetailRow(
+                                  propertyName: "Date of birth: ",
+                                  value:
+                                      viewModel.fetchDateFromString(model.dob,true)),
+                              CustomDetailRow(
+                                  propertyName: "Date of expiry: ",
+                                  value:
+                                      viewModel.fetchDateFromString(model.doe,false)),
+                              const SizedBox(height: 20)
+                            ],
+                          ),
+                        )
+                      : Container()),
+              InkWell(
+                  onTap: () async {
+                    log(viewModel.dob);
+                    log(viewModel.doe);
+                    // ImagePicker picker = ImagePicker();
+                    // XFile? xfile =
+                    //     await picker.pickImage(source: ImageSource.camera);
+                    // if (xfile != null) {
+                    //   viewModel.processDeviceImage(xfile.path);
+                    // }
+                  },
+                  child:
+                      const CustomHomeButton(text: "Scan image from camera")),
+              const SizedBox(height: 10),
+              InkWell(
+                  onTap: () async {
+                    ImagePicker picker = ImagePicker();
+                    XFile? xfile =
+                        await picker.pickImage(source: ImageSource.gallery);
+                    if (xfile != null) {
+                      viewModel.processDeviceImage(xfile.path);
+                    }
+                  },
+                  child:
+                      const CustomHomeButton(text: "Scan image from gallery"))
+            ]));
   }
 }
