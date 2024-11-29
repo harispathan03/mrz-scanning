@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mrz/pages/blinkid_page.dart';
+import 'package:mrz/pages/google_ml_kit_page.dart';
 import 'package:mrz/widget/custom_home_button.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,7 +26,13 @@ class HomePage extends StatelessWidget {
               },
               child: const CustomHomeButton(text: "BlinkId Passport Scan")),
           const SizedBox(height: 10),
-          const CustomHomeButton(text: "Google ML Kit Passport Scan"),
+          InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const GoogleMlKitPage()));
+              },
+              child:
+                  const CustomHomeButton(text: "Google ML Kit Passport Scan")),
           const SizedBox(height: 10),
         ],
       ),
