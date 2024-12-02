@@ -31,9 +31,33 @@ class GoogleMlKitViewmodel extends ChangeNotifier {
       for (TextLine line in block.lines) {
         if (line.text.contains("<")) {
           mrz.add(line.text);
+          log(line.text);
         }
       }
     }
+    while (mrz.first.length < 44) {
+      if (mrz.first.length + mrz[1].length <= 44) {
+        mrz[0] = mrz[0] + mrz[1];
+        mrz.removeAt(1);
+      } else {
+        mrz[0] = mrz[0].padRight(44, "<");
+      }
+      log("Entered in first");
+    }
+    while (mrz.last.length < 44) {
+      if (mrz.last.length + mrz[mrz.length - 2].length <= 44) {
+        mrz.last = mrz[mrz.length - 2] + mrz.last;
+        mrz.removeAt(mrz.length - 2);
+      } else {
+        int paddingLength = 44 - mrz.last.length;
+        int insertPosition = mrz.last.length - 2;
+        mrz.last = mrz.last.substring(0, insertPosition) +
+            '<' * paddingLength +
+            mrz.last.substring(insertPosition);
+      }
+      log("Entered in second");
+    }
+
     var firstMRZ = mrz.first.replaceAll(" ", "");
     var secondMRZ = mrz.last.replaceAll(" ", "");
     log('First MRZ: $firstMRZ');
@@ -79,13 +103,15 @@ class GoogleMlKitViewmodel extends ChangeNotifier {
     int passportResult = calculateChecksum(documentNumber);
     int dobResult = calculateChecksum(dob);
     int doeResult = calculateChecksum(doe);
-    int finalResult = calculateChecksum(documentNumber.replaceAll("<", "") +
+    String finalString = documentNumber.replaceAll("<", "") +
         documentNumberChecksum.toString() +
         dob +
         dobChecksum.toString() +
         doe +
         doeChecksum.toString() +
-        extraDataString);
+        extraDataString;
+    log(finalString);
+    int finalResult = calculateChecksum(finalString);
     log("final result: $finalResult");
     if (passportResult == documentNumberChecksum &&
         dobResult == dobChecksum &&
@@ -155,6 +181,7 @@ class GoogleMlKitViewmodel extends ChangeNotifier {
     gender = "";
     dob = "";
     doe = "";
+    extraData = null;
     isVerified = false;
     notifyListeners();
   }
