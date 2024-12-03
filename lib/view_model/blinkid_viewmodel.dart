@@ -2,6 +2,7 @@ import 'package:blinkid_flutter/microblink_scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:mrz/utils/api_keys.dart';
 
 class BlinkidViewModel extends ChangeNotifier {
   String license = "";
@@ -20,11 +21,9 @@ class BlinkidViewModel extends ChangeNotifier {
 
     // set your license
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      license =
-          "sRwCAA9jb20uZXhhbXBsZS5tcnoAbGV5SkRjbVZoZEdWa1QyNGlPakUzTXpJM01ERTFOell6TVRJc0lrTnlaV0YwWldSR2IzSWlPaUpsWXpJM1lqZGtZaTAxWXpkbUxUUTNZMkl0T0dNNE9TMDBaRGcwT0dOak56VXdaRE1pZlE9PTf3E+uqMMSSZgXjrLVKziqD9JOMA9oH6BGg/q+VvMEHRCpBh0rA9lgyWs+/coZAGSiuwwOw2QNcsbpD8sbGnWJ+RAAbVzEnjj4ZBpz6RUYbbkdX1CC/h1Yn2KPdOtphCKyOkiWjYY0p3t7M5S9eOhP509+cVRcwgQ==";
+      license = ApiKeys.blinkIdLicenseKeyIos;
     } else if (Theme.of(context).platform == TargetPlatform.android) {
-      license =
-          "sRwCAA9jb20uZXhhbXBsZS5tcnoAbGV5SkRjbVZoZEdWa1QyNGlPakUzTXpJM01ERTFOell6TVRJc0lrTnlaV0YwWldSR2IzSWlPaUpsWXpJM1lqZGtZaTAxWXpkbUxUUTNZMkl0T0dNNE9TMDBaRGcwT0dOak56VXdaRE1pZlE9PTf3E+uqMMSSZgXjrLVKziqD9JOMA9oH6BGg/q+VvMEHRCpBh0rA9lgyWs+/coZAGSiuwwOw2QNcsbpD8sbGnWJ+RAAbVzEnjj4ZBpz6RUYbbkdX1CC/h1Yn2KPdOtphCKyOkiWjYY0p3t7M5S9eOhP509+cVRcwgQ==";
+      license = ApiKeys.blinkIdLicenseKeyAndroid;
     }
 
     try {
