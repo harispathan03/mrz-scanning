@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => BlinkidViewModel()),
         ChangeNotifierProvider(create: (context) => GoogleMlKitViewmodel()),
-        ChangeNotifierProvider(create: (context) => IdAnalyzerViewmodel()),
+        ChangeNotifierProvider(create: (context) => IdAnalyzerViewModel()),
       ],
       child: MaterialApp(
         title: 'MRZ Scanning',
