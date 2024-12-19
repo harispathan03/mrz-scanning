@@ -1,16 +1,28 @@
-# mrz
+# MRZ Scanning
 
-A new Flutter project.
+A Flutter application which integrate 3rd party services - MicroBlink BlinkId Id Verification and IdAnalyzer Id Verification functinality.
 
-## Getting Started
+## Project Details
 
-This project is a starting point for a Flutter application.
+To see how project is implemented and how things are integrated, please visit my official medium blogs.
+1. [BlinkId Integration Blog](https://medium.com/@pathanharis61/integrating-blinkid-for-passport-id-scanning-in-flutter-9b18258f9efe).
+2. [IdAnalyzer Integration Blog](https://medium.com/@pathanharis61/idanalyzer-for-id-scanning-in-flutter-d405a59b9e62). 
 
-A few resources to get you started if this is your first Flutter project:
+## Project Recordings
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+For quick overview of the functionality of the application, please refer below recordings.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### BlinkId video
+
+
+https://github.com/user-attachments/assets/4a2c1241-d9fd-4368-b7e9-d3a69cd3193f
+
+
+
+### IdAnalyzer video
+
+
+
+https://github.com/user-attachments/assets/5a12be8d-9c99-4cbb-a021-cfe9b644fbde
+
+
